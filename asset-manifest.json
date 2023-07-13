@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/guesstheflag/static/css/main.724c943e.css",
-    "main.js": "/guesstheflag/static/js/main.fa231530.js",
-    "static/js/787.6c6cbaa1.chunk.js": "/guesstheflag/static/js/787.6c6cbaa1.chunk.js",
-    "index.html": "/guesstheflag/index.html",
-    "main.fa231530.js.map": "/guesstheflag/static/js/main.fa231530.js.map",
-    "787.6c6cbaa1.chunk.js.map": "/guesstheflag/static/js/787.6c6cbaa1.chunk.js.map"
+    "main.css": "//geniegeekeur.github.io/static/css/main.724c943e.css",
+    "main.js": "//geniegeekeur.github.io/static/js/main.0adf2665.js",
+    "static/js/787.6c6cbaa1.chunk.js": "//geniegeekeur.github.io/static/js/787.6c6cbaa1.chunk.js",
+    "index.html": "//geniegeekeur.github.io/index.html",
+    "main.0adf2665.js.map": "//geniegeekeur.github.io/static/js/main.0adf2665.js.map",
+    "787.6c6cbaa1.chunk.js.map": "//geniegeekeur.github.io/static/js/787.6c6cbaa1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.724c943e.css",
-    "static/js/main.fa231530.js"
+    "static/js/main.0adf2665.js"
   ]
 }
