@@ -4,13 +4,15 @@ import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
 import "../fonts/font.css";
 import Button from "@mui/material/Button";
+import "animate.css";
 
 const images = require.context("../img/flags/", true);
 const imageList = images.keys().map((image) => images(image));
 
 let ArleadyGet = [];
-let indexJeu = 0;
+let indexJeu = Math.floor(Math.random() * 243);
 let score = 0;
+let badChoice = 0;
 let indexJeuArleadyGet = [];
 let CountryChoice = [
   "Andorre",
@@ -257,8 +259,7 @@ let CountryChoice = [
   "Zambie",
   "Zimbabwe",
 ];
-console.log(CountryChoice.length);
-
+indexJeuArleadyGet.push(indexJeu);
 function Index() {
   return (
     <Grid
@@ -296,14 +297,30 @@ function Index() {
         item
         alignItems="center"
         justifyContent="center"
+        id="PaysName"
         sx={{
           width: "${window.innerWidth}",
-          height: "150px",
+          height: "auto",
           paddingBottom: "30px",
+          position: "-webkit - sticky",
+          position: "sticky",
+          top: "0",
+          zIndex: "10",
+          backgroundColor: "#FCF6F3",
         }}
       >
-        <Typography item fontWeight="400" fontFamily="Inter" variant="h3">
-          <span id="Pays">Andorre</span>
+        <Typography
+          item
+          fontWeight="400"
+          fontFamily="Inter"
+          variant="h3"
+          textAlign="center"
+        >
+          <span id="Pays">{CountryChoice[indexJeu]}</span>
+          <br />
+          Score : <span id="score">{score}</span>
+          <br />
+          Faute : <span id="faute">{badChoice}</span>/5
         </Typography>
       </Grid>
       <Grid container item justifyContent="center">
@@ -324,39 +341,50 @@ function Index() {
           );
         })}
       </Grid>
-      <Grid
-        container
-        item
-        alignItems="center"
-        justifyContent="center"
-        sx={{
-          width: "${window.innerWidth}",
-          height: "150px",
-          paddingBottom: "30px",
-        }}
-      >
-        <Typography item fontWeight="400" fontFamily="Inter" variant="h3">
-          Score : <span id="score">{score}</span>
-        </Typography>
-      </Grid>
     </Grid>
   );
 }
 
 export default Index;
 
+const animateCSS = (element, animation, prefix = "animate__") =>
+  // We create a Promise and return it
+  new Promise((resolve, reject) => {
+    const animationName = `${prefix}${animation}`;
+    const node = document.getElementById(element);
+
+    node.classList.add(`${prefix}animated`, animationName);
+
+    // When the animation ends, we clean the classes and resolve the Promise
+    function handleAnimationEnd(event) {
+      event.stopPropagation();
+      node.classList.remove(`${prefix}animated`, animationName);
+      resolve("Animation ended");
+    }
+
+    node.addEventListener("animationend", handleAnimationEnd, { once: true });
+  });
+
 function NextLevel(name, index) {
-  if (index === indexJeu) {
-    score = score + 1;
-    document.querySelector("#score").textContent = score;
-    ArleadyGet.push(name);
-    document.getElementById(name).style.display = "none";
-    document.getElementById(name).style.visibility = "hidden";
-    indexJeuArleadyGet.push(indexJeu);
-    while (indexJeuArleadyGet.includes(indexJeu)) {
-      indexJeu = Math.floor(Math.random() * 243);
-      console.log(indexJeu);
+  if (badChoice + 1 === 5) {
+    badChoice = badChoice + 1;
+    window.location.reload();
+  } else {
+    if (index === indexJeu) {
+      score = score + 1;
+      document.querySelector("#score").textContent = score;
+      ArleadyGet.push(name);
+      document.getElementById(name).style.display = "none";
+      document.getElementById(name).style.visibility = "hidden";
+      indexJeuArleadyGet.push(indexJeu);
+      while (indexJeuArleadyGet.includes(indexJeu)) {
+        indexJeu = Math.floor(Math.random() * 243);
+      }
+    } else {
+      badChoice = badChoice + 1;
+      animateCSS(index, "headShake");
     }
   }
+  document.querySelector("#faute").textContent = badChoice;
   document.querySelector("#Pays").textContent = CountryChoice[indexJeu];
 }

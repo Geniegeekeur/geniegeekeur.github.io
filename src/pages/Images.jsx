@@ -12,7 +12,6 @@ const images = importAll(
   require.context("../img/flags", false, /\.(png|jpe?g|svg)$/)
 );
 
-console.log(images);
 let k = 0;
 
 function ImageGallery() {

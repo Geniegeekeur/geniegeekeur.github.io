@@ -1,7 +1,7 @@
 {
   "name": "guesstheflag",
   "version": "0.1.0",
-  "homepage": "https://https://geniegeekeur.github.io/",
+  "homepage": "https://geniegeekeur.github.io/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
