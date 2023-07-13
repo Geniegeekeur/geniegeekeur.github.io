@@ -1,14 +1,15 @@
 {
   "files": {
-    "main.css": "//geniegeekeur.github.io/static/css/main.724c943e.css",
-    "main.js": "//geniegeekeur.github.io/static/js/main.0adf2665.js",
-    "static/js/787.6c6cbaa1.chunk.js": "//geniegeekeur.github.io/static/js/787.6c6cbaa1.chunk.js",
-    "index.html": "//geniegeekeur.github.io/index.html",
-    "main.0adf2665.js.map": "//geniegeekeur.github.io/static/js/main.0adf2665.js.map",
-    "787.6c6cbaa1.chunk.js.map": "//geniegeekeur.github.io/static/js/787.6c6cbaa1.chunk.js.map"
+    "main.css": "/static/css/main.a4867337.css",
+    "main.js": "/static/js/main.369250c6.js",
+    "static/js/787.6c6cbaa1.chunk.js": "/static/js/787.6c6cbaa1.chunk.js",
+    "index.html": "/index.html",
+    "main.a4867337.css.map": "/static/css/main.a4867337.css.map",
+    "main.369250c6.js.map": "/static/js/main.369250c6.js.map",
+    "787.6c6cbaa1.chunk.js.map": "/static/js/787.6c6cbaa1.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.724c943e.css",
-    "static/js/main.0adf2665.js"
+    "static/css/main.a4867337.css",
+    "static/js/main.369250c6.js"
   ]
 }
