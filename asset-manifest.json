@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/guesstheflag/static/css/main.724c943e.css",
+    "main.js": "/guesstheflag/static/js/main.fa231530.js",
+    "static/js/787.6c6cbaa1.chunk.js": "/guesstheflag/static/js/787.6c6cbaa1.chunk.js",
+    "index.html": "/guesstheflag/index.html",
+    "main.fa231530.js.map": "/guesstheflag/static/js/main.fa231530.js.map",
+    "787.6c6cbaa1.chunk.js.map": "/guesstheflag/static/js/787.6c6cbaa1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.724c943e.css",
+    "static/js/main.fa231530.js"
+  ]
+}
