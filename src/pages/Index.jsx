@@ -5,6 +5,8 @@ import { Typography } from "@mui/material";
 import "../fonts/font.css";
 import Button from "@mui/material/Button";
 import "animate.css";
+import { useState, useEffect } from "react";
+import Stopwatch from "./StopWatch";
 
 const images = require.context("../img/flags/", true);
 const imageList = images.keys().map((image) => images(image));
@@ -12,7 +14,7 @@ const imageList = images.keys().map((image) => images(image));
 let ArleadyGet = [];
 let indexJeu = Math.floor(Math.random() * 243);
 let score = 0;
-let badChoice = 0;
+let badChoice = 4;
 let indexJeuArleadyGet = [];
 let CountryChoice = [
   "Andorre",
@@ -260,6 +262,32 @@ let CountryChoice = [
   "Zimbabwe",
 ];
 indexJeuArleadyGet.push(indexJeu);
+
+let heartBase = [];
+for (let i = 0; i < 5; i++) {
+  heartBase[i] = (
+    <svg
+      width="46"
+      height="46"
+      fill="none"
+      stroke="currentColor"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {" "}
+      <path d="M19.5 13.576a4.976 4.976 0 0 0 1.495-3.704A5 5 0 0 0 12 7.01a5 5 0 1 0-7.5 6.566l7.5 7.428 7.5-7.428Z"></path>{" "}
+    </svg>
+  );
+}
+
+let heart = [];
+for (let i = 0; i < 5; i++) {
+  heart[0] =
+    "<svg width='46' height='46' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576a4.976 4.976 0 0 0 1.495-3.704A5 5 0 0 0 12 7.01a5 5 0 1 0-7.5 6.566l7.5 7.428 7.5-7.428Z'></path> </svg>";
+}
+
 function Index() {
   return (
     <Grid
@@ -289,19 +317,30 @@ function Index() {
           fontWeight="600"
           textAlign="center"
         >
-          Guess The <span style={{ color: "#BF6436" }}>Flag</span>
+          Guess The{" "}
+          <span
+            style={{
+              background: "linear-gradient(0.25turn, #d48963 , #BF6436)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Flag
+          </span>
         </Typography>
+      </Grid>
+      <Grid>
+        <Stopwatch />
       </Grid>
       <Grid
         container
         item
         alignItems="center"
-        justifyContent="center"
+        justifyContent="space-between"
         id="PaysName"
         sx={{
           width: "${window.innerWidth}",
           height: "auto",
-          paddingBottom: "30px",
           position: "-webkit - sticky",
           position: "sticky",
           top: "0",
@@ -309,19 +348,71 @@ function Index() {
           backgroundColor: "#FCF6F3",
         }}
       >
-        <Typography
+        <Grid container item xs={3} alignItems="center" justifyContent="center">
+          <Typography
+            item
+            fontWeight="400"
+            fontFamily="Inter"
+            variant="h3"
+            textAlign="center"
+          >
+            <svg
+              width="46"
+              height="46"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M5 5v16"></path>
+              <path d="M19 5v9"></path>
+              <path d="M5 5a5 5 0 0 1 7 0 5 5 0 0 0 7 0"></path>
+              <path d="M5 14a5 5 0 0 1 7 0 5 5 0 0 0 7 0"></path>
+            </svg>
+            <span id="score">{score}</span>
+          </Typography>
+        </Grid>
+        <Grid
+          container
           item
-          fontWeight="400"
-          fontFamily="Inter"
-          variant="h3"
-          textAlign="center"
+          xs={6}
+          height="100px"
+          alignItems="center"
+          justifyContent="center"
         >
-          <span id="Pays">{CountryChoice[indexJeu]}</span>
-          <br />
-          Score : <span id="score">{score}</span>
-          <br />
-          Faute : <span id="faute">{badChoice}</span>/5
-        </Typography>
+          <Typography
+            item
+            fontWeight="400"
+            fontFamily="Inter"
+            variant="h3"
+            textAlign="center"
+            color="#BF6436"
+          >
+            <span id="Pays">{CountryChoice[indexJeu]}</span>
+          </Typography>
+        </Grid>
+        <Grid container item xs={3} alignItems="center" justifyContent="center">
+          <Typography
+            item
+            fontWeight="400"
+            fontFamily="Inter"
+            variant="h3"
+            textAlign="center"
+          >
+            <Grid container>
+              {heartBase.map(function (object, id) {
+                return (
+                  <Box item id={id}>
+                    {object}
+                  </Box>
+                );
+              })}
+            </Grid>
+          </Typography>
+        </Grid>
       </Grid>
       <Grid container item justifyContent="center">
         {imageList.map((image, index) => {
@@ -329,12 +420,15 @@ function Index() {
             <Button
               item
               variant="text"
-              id={image}
+              id={index}
               onClick={() => {
                 NextLevel(image, index);
               }}
             >
-              <img id={index} src={image} alt={`image-${index}`} />
+              <Grid container direction="column">
+                <img id={index} src={image} alt={`image-${index}`} />
+                <span id={image}></span>
+              </Grid>
             </Button>
           ) : (
             console.log("hello")
@@ -346,6 +440,9 @@ function Index() {
 }
 
 export default Index;
+
+console.log(window.innerWidth);
+console.log(46 * (window.innerWidth / 46));
 
 const animateCSS = (element, animation, prefix = "animate__") =>
   // We create a Promise and return it
@@ -366,25 +463,41 @@ const animateCSS = (element, animation, prefix = "animate__") =>
   });
 
 function NextLevel(name, index) {
-  if (badChoice + 1 === 5) {
-    badChoice = badChoice + 1;
+  if (badChoice === 0) {
+    heart[badChoice] =
+      "<svg width='46' height='46' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576 12 21.004l-7.5-7.428A5 5 0 1 1 12 7.01a5 5 0 1 1 7.5 6.572'></path> <path d='m12 7-2 4 4 3-2 4v3'></path> </svg>";
+    heart.map(function (object, id) {
+      document.getElementById(id).innerHTML = object;
+    });
+    animateCSS(badChoice, "heartBeat");
     window.location.reload();
   } else {
     if (index === indexJeu) {
       score = score + 1;
       document.querySelector("#score").textContent = score;
+
       ArleadyGet.push(name);
-      document.getElementById(name).style.display = "none";
-      document.getElementById(name).style.visibility = "hidden";
+      // document.getElementById(index).style.display = "none";
+      // document.getElementById(index).style.visibility = "hidden";
+
+      document.getElementById(name).textContent = CountryChoice[index];
+      document.getElementById(index).style.filter = "grayscale(80%)";
+
       indexJeuArleadyGet.push(indexJeu);
       while (indexJeuArleadyGet.includes(indexJeu)) {
         indexJeu = Math.floor(Math.random() * 243);
       }
     } else {
-      badChoice = badChoice + 1;
+      heart[badChoice] =
+        "<svg width='46' height='46' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576 12 21.004l-7.5-7.428A5 5 0 1 1 12 7.01a5 5 0 1 1 7.5 6.572'></path> <path d='m12 7-2 4 4 3-2 4v3'></path> </svg>";
+      heart.map(function (object, id) {
+        document.getElementById(id).innerHTML = object;
+      });
       animateCSS(index, "headShake");
+      animateCSS(badChoice, "heartBeat");
+      console.log(document.getElementById(badChoice).classList);
+      badChoice = badChoice - 1;
     }
   }
-  document.querySelector("#faute").textContent = badChoice;
   document.querySelector("#Pays").textContent = CountryChoice[indexJeu];
 }
