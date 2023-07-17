@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../fonts/font.css";
+import { Typography } from "@mui/material";
 
-// Hours calculation
-const hours = 0;
-
-// Minutes calculation
-const minutes = 0;
-
-// Seconds calculation
-const seconds = 0;
-
-// Milliseconds calculation
-const milliseconds = 0;
-const Stopwatch = () => {
+const Stopwatch = (running) => {
+  const { run } = running;
   // state to store time
   const [time, setTime] = useState(0);
 
   // state to check stopwatch running or not
-  const [isRunning, setIsRunning] = useState(true);
+  const [isRunning, setIsRunning] = useState(run);
 
   // Hours calculation
   const hours = Math.floor(time / 360000);
@@ -45,20 +36,24 @@ const Stopwatch = () => {
     setIsRunning(!isRunning);
   };
 
-  // Method to reset timer back to 0
-  const reset = () => {
-    setTime(0);
-  };
+  // // Method to reset timer back to 0
+  // const reset = () => {
+  //   setTime(0);
+  // };
   return (
-    <div className="stopwatch-container">
-      <h3
-        className="stopwatch-time"
-        style={{ fontFamily: "Inter", fontWeight: "300", fontSize: "40px" }}
+    <div>
+      <Typography
+        id="text"
+        className="stopwatch"
+        fontWeight="400"
+        fontFamily="Inter"
+        variant="h3"
+        textAlign="center"
       >
         {hours}:{minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}:
         {milliseconds.toString().padStart(2, "0")}
-      </h3>
+      </Typography>
     </div>
   );
 };

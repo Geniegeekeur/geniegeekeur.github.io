@@ -1,18 +1,28 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
+} from "@mui/material";
 import "../fonts/font.css";
 import Button from "@mui/material/Button";
 import "animate.css";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+
 import Stopwatch from "./StopWatch";
 
 const images = require.context("../img/flags/", true);
 const imageList = images.keys().map((image) => images(image));
 
+let nbIndice = 0;
 let ArleadyGet = [];
-let indexJeu = Math.floor(Math.random() * 243);
+let indexJeu = 207; //Math.floor(Math.random() * 240);
 let score = 0;
 let badChoice = 4;
 let indexJeuArleadyGet = [];
@@ -49,7 +59,6 @@ let CountryChoice = [
   "Brésil",
   "Bahamas",
   "Bhoutan",
-  "Norvège",
   "Botswana",
   "Biélorussie",
   "Belize",
@@ -57,7 +66,7 @@ let CountryChoice = [
   "îles Cocos",
   "République démocratique du Congo",
   "République centrafricaine",
-  "république du Congo",
+  "République du Congo",
   "Suisse",
   "Côte d'Ivoire",
   "îles Cook",
@@ -113,7 +122,6 @@ let CountryChoice = [
   "Guinée-Bissau",
   "Guyana",
   "Hong Kong",
-  "Australie",
   "Honduras",
   "Croatie",
   "Haïti",
@@ -212,7 +220,6 @@ let CountryChoice = [
   "Suède",
   "Singapour",
   "Slovénie",
-  "Norvège",
   "Slovaquie",
   "Sierra Leone",
   "Saint-Marin",
@@ -262,17 +269,24 @@ let CountryChoice = [
   "Zimbabwe",
 ];
 indexJeuArleadyGet.push(indexJeu);
+let debut = 5;
+let fin = 5;
+
+let hasard;
+
+let end = false;
 
 let heartBase = [];
 for (let i = 0; i < 5; i++) {
   heartBase[i] = (
     <svg
+      id="icon"
       width="46"
       height="46"
       fill="none"
       stroke="currentColor"
-      stroke-linejoin="round"
-      stroke-width="2"
+      strokeLinejoin="round"
+      strokeWidth="1"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -284,11 +298,25 @@ for (let i = 0; i < 5; i++) {
 
 let heart = [];
 for (let i = 0; i < 5; i++) {
-  heart[0] =
-    "<svg width='46' height='46' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576a4.976 4.976 0 0 0 1.495-3.704A5 5 0 0 0 12 7.01a5 5 0 1 0-7.5 6.566l7.5 7.428 7.5-7.428Z'></path> </svg>";
+  heart[i] =
+    "<svg id='icon' width='46' height='46' fill='none' stroke='currentColor' strokeLinejoin='round' strokeWidth='3' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576a4.976 4.976 0 0 0 1.495-3.704A5 5 0 0 0 12 7.01a5 5 0 1 0-7.5 6.566l7.5 7.428 7.5-7.428Z'></path> </svg>";
 }
 
-function Index() {
+function WorldGame() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    setCountryTextSize();
+  }, []);
+
   return (
     <Grid
       container
@@ -299,6 +327,20 @@ function Index() {
         height: "${window.innerHeight}",
       }}
     >
+      <Dialog open={open}>
+        <DialogTitle>Vous avez perdu !</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Le drapeau correspondant au {CountryChoice[indexJeu]} était :{" "}
+            <img src={imageList[indexJeu]} />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Fermer
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Grid
         container
         item
@@ -306,11 +348,11 @@ function Index() {
         justifyContent="center"
         sx={{
           width: "${window.innerWidth}",
-          height: "150px",
         }}
       >
         <Typography
           item
+          id="title"
           variant="h2"
           fontFamily="Inter"
           color="#180C07"
@@ -329,18 +371,15 @@ function Index() {
           </span>
         </Typography>
       </Grid>
-      <Grid>
-        <Stopwatch />
+      <Grid container justifyContent="space-around" alignItems="center">
+        <Stopwatch item run={true} />
       </Grid>
       <Grid
         container
         item
-        alignItems="center"
-        justifyContent="space-between"
         id="PaysName"
         sx={{
           width: "${window.innerWidth}",
-          height: "auto",
           position: "-webkit - sticky",
           position: "sticky",
           top: "0",
@@ -348,22 +387,25 @@ function Index() {
           backgroundColor: "#FCF6F3",
         }}
       >
-        <Grid container item xs={3} alignItems="center" justifyContent="center">
+        <Grid container item xs alignItems="center" justifyContent="center">
           <Typography
             item
+            id="text"
             fontWeight="400"
             fontFamily="Inter"
             variant="h3"
             textAlign="center"
           >
+            <span id="score">{score}</span>
             <svg
+              id="icon"
               width="46"
               height="46"
               fill="none"
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1"
               viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -372,33 +414,34 @@ function Index() {
               <path d="M5 5a5 5 0 0 1 7 0 5 5 0 0 0 7 0"></path>
               <path d="M5 14a5 5 0 0 1 7 0 5 5 0 0 0 7 0"></path>
             </svg>
-            <span id="score">{score}</span>
           </Typography>
         </Grid>
         <Grid
           container
           item
-          xs={6}
+          xs
           height="100px"
           alignItems="center"
           justifyContent="center"
         >
           <Typography
             item
-            fontWeight="400"
+            fontWeight="600"
             fontFamily="Inter"
-            variant="h3"
+            id="text countryChoice"
+            className="countryChoice"
             textAlign="center"
             color="#BF6436"
           >
             <span id="Pays">{CountryChoice[indexJeu]}</span>
           </Typography>
         </Grid>
-        <Grid container item xs={3} alignItems="center" justifyContent="center">
+        <Grid container item alignItems="center" justifyContent="center">
           <Typography
             item
             fontWeight="400"
             fontFamily="Inter"
+            id="text"
             variant="h3"
             textAlign="center"
           >
@@ -414,35 +457,76 @@ function Index() {
           </Typography>
         </Grid>
       </Grid>
-      <Grid container item justifyContent="center">
-        {imageList.map((image, index) => {
-          return !ArleadyGet.includes(image) ? (
-            <Button
-              item
-              variant="text"
-              id={index}
-              onClick={() => {
-                NextLevel(image, index);
-              }}
-            >
-              <Grid container direction="column">
-                <img id={index} src={image} alt={`image-${index}`} />
-                <span id={image}></span>
-              </Grid>
-            </Button>
-          ) : (
-            console.log("hello")
-          );
-        })}
-      </Grid>
+      <Card>
+        <Grid container item justifyContent="center">
+          {imageList.map((image, index) => {
+            return !ArleadyGet.includes(image) ? (
+              <Button
+                item
+                variant="text"
+                id={index + 5}
+                onMouseOver={() => OnOver(index + 5)}
+                onMouseLeave={() => OnLeave(index + 5)}
+                onClick={() => {
+                  NextLevel(image, index + 5);
+                  if (end === true) {
+                    handleClickOpen();
+                  }
+                }}
+              >
+                <Grid container direction="column">
+                  <img id={index + 5} src={image} alt={`image-${index + 5}`} />
+                  <span id={image}></span>
+                </Grid>
+              </Button>
+            ) : (
+              {}
+            );
+          })}
+        </Grid>
+      </Card>
+      <Button
+        item
+        variant="contained"
+        onClick={() => {
+          GiveHint(indexJeu + 5);
+        }}
+        sx={{
+          position: "fixed",
+          bottom: "20px",
+          right: "30px",
+          zIndex: "99",
+          borderRadius: "10p",
+        }}
+      >
+        <svg
+          width="46"
+          height="46"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M9 16a5 5 0 1 1 6 0 3.5 3.5 0 0 0-1 3 2 2 0 0 1-4 0 3.499 3.499 0 0 0-1-3"></path>
+          <path d="M9.7 17h4.6"></path>
+        </svg>
+      </Button>
     </Grid>
   );
 }
 
-export default Index;
+export default WorldGame;
 
-console.log(window.innerWidth);
-console.log(46 * (window.innerWidth / 46));
+function setCountryTextSize() {
+  if (document.getElementById("Pays").textContent.length >= 20) {
+    document.getElementById("Pays").style.fontSize = "30px";
+  } else {
+    document.getElementById("Pays").style.fontSize = "50px";
+  }
+}
 
 const animateCSS = (element, animation, prefix = "animate__") =>
   // We create a Promise and return it
@@ -463,41 +547,119 @@ const animateCSS = (element, animation, prefix = "animate__") =>
   });
 
 function NextLevel(name, index) {
-  if (badChoice === 0) {
-    heart[badChoice] =
-      "<svg width='46' height='46' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576 12 21.004l-7.5-7.428A5 5 0 1 1 12 7.01a5 5 0 1 1 7.5 6.572'></path> <path d='m12 7-2 4 4 3-2 4v3'></path> </svg>";
-    heart.map(function (object, id) {
-      document.getElementById(id).innerHTML = object;
-    });
-    animateCSS(badChoice, "heartBeat");
-    window.location.reload();
-  } else {
-    if (index === indexJeu) {
+  if (end === false) {
+    if (index - 5 === indexJeu) {
+      for (let i = debut; i < fin; i++) {
+        document.getElementById(i).style.backgroundColor = "";
+      }
+      nbIndice = 0;
       score = score + 1;
       document.querySelector("#score").textContent = score;
 
       ArleadyGet.push(name);
-      // document.getElementById(index).style.display = "none";
-      // document.getElementById(index).style.visibility = "hidden";
-
-      document.getElementById(name).textContent = CountryChoice[index];
-      document.getElementById(index).style.filter = "grayscale(80%)";
+      document.getElementById(index).style.display = "none";
+      document.getElementById(index).style.visibility = "hidden";
 
       indexJeuArleadyGet.push(indexJeu);
       while (indexJeuArleadyGet.includes(indexJeu)) {
-        indexJeu = Math.floor(Math.random() * 243);
+        indexJeu = Math.floor(Math.random() * 240);
       }
     } else {
       heart[badChoice] =
-        "<svg width='46' height='46' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576 12 21.004l-7.5-7.428A5 5 0 1 1 12 7.01a5 5 0 1 1 7.5 6.572'></path> <path d='m12 7-2 4 4 3-2 4v3'></path> </svg>";
+        "<svg id='icon' width='46' height='46' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576 12 21.004l-7.5-7.428A5 5 0 1 1 12 7.01a5 5 0 1 1 7.5 6.572'></path> <path d='m12 7-2 4 4 3-2 4v3'></path> </svg>";
       heart.map(function (object, id) {
         document.getElementById(id).innerHTML = object;
       });
       animateCSS(index, "headShake");
       animateCSS(badChoice, "heartBeat");
-      console.log(document.getElementById(badChoice).classList);
       badChoice = badChoice - 1;
+      if (badChoice === -1) {
+        heart[badChoice + 1] =
+          "<svg id='icon' width='46' height='46' fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'> <path d='M19.5 13.576 12 21.004l-7.5-7.428A5 5 0 1 1 12 7.01a5 5 0 1 1 7.5 6.572'></path> <path d='m12 7-2 4 4 3-2 4v3'></path> </svg>";
+        heart.map(function (object, id) {
+          document.getElementById(id).innerHTML = object;
+        });
+        animateCSS(badChoice + 1, "heartBeat");
+        EndGame(indexJeu);
+        //window.location.reload();
+      }
     }
   }
   document.querySelector("#Pays").textContent = CountryChoice[indexJeu];
+  setCountryTextSize();
+}
+
+function OnOver(index) {
+  document.getElementById(index).style.transform = "scale(1.2)";
+}
+
+function OnLeave(index) {
+  document.getElementById(index).style.transform = "scale(1)";
+}
+
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function GiveHint(index) {
+  for (let i = debut; i < fin; i++) {
+    document.getElementById(i).style.backgroundColor = "";
+  }
+  if (nbIndice === 0) {
+    if (index < 15) {
+      debut = randomIntFromInterval(5, index);
+      fin = debut + 10;
+    } else if (index >= 235) {
+      fin = randomIntFromInterval(index + 1, 245);
+      debut = fin - 10;
+    } else {
+      debut = randomIntFromInterval(index - 9, index);
+      fin = debut + 10;
+    }
+    nbIndice = nbIndice + 1;
+    for (let i = debut; i < fin; i++) {
+      document.getElementById(i).style.backgroundColor = "#f69767";
+    }
+  } else if (nbIndice === 1) {
+    if (index < 10) {
+      debut = randomIntFromInterval(5, index);
+      fin = debut + 5;
+    } else if (index >= 240) {
+      fin = randomIntFromInterval(index + 1, 245);
+      debut = fin - 5;
+    } else {
+      debut = randomIntFromInterval(index - 4, index);
+      fin = debut + 5;
+    }
+    nbIndice = nbIndice + 1;
+    for (let i = debut; i < fin; i++) {
+      document.getElementById(i).style.backgroundColor = "#b95d2e";
+    }
+  } else if (nbIndice === 2) {
+    if (index < 8) {
+      debut = randomIntFromInterval(5, index);
+      fin = debut + 3;
+    } else if (index >= 241) {
+      fin = randomIntFromInterval(index + 1, 245);
+      debut = fin - 3;
+    } else {
+      debut = randomIntFromInterval(index - 2, index);
+      fin = debut + 3;
+    }
+    for (let i = debut; i < fin; i++) {
+      document.getElementById(i).style.backgroundColor = "#653b26";
+    }
+  }
+  document.getElementById(debut).scrollIntoView({ block: "center" });
+}
+
+function EndGame(index) {
+  var buttons = document.getElementsByTagName("Button");
+  for (var i = 0, len = buttons.length; i < len; i++) {
+    buttons[i].disabled = true;
+  }
+  end = true;
+  var textClock = document.getElementsByClassName("stopwatch")[0].textContent;
+  document.getElementsByClassName("stopwatch")[0].textContent = textClock;
 }
