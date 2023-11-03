@@ -624,7 +624,7 @@ const animateCSS = (element, animation, prefix = "animate__") =>
     node.addEventListener("animationend", handleAnimationEnd, { once: true });
   });
 
-function NextLevel(name, index) {
+async function NextLevel(name, index) {
   if (end === false) {
     if (index - 5 === indexJeu) {
       for (let i = debut; i < fin; i++) {
@@ -633,6 +633,8 @@ function NextLevel(name, index) {
       nbIndice = 0;
       score = score + 1;
       document.querySelector("#score").textContent = score;
+
+      await animateCSS(index, "zoomOut");
 
       ArleadyGet.push(name);
       document.getElementById(index).style.display = "none";
