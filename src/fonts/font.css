@@ -15,4 +15,7 @@
     width: 30px;
     height: 30px;
   }
+  .image {
+    transform: scale(0.5);
+  }
 }

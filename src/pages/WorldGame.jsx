@@ -13,12 +13,18 @@ import {
 import "../fonts/font.css";
 import Button from "@mui/material/Button";
 import "animate.css";
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import * as JimpObj from "jimp";
 import Stopwatch from "./StopWatch";
 
 const images = require.context("../img/flags/", true);
 const imageList = images.keys().map((image) => images(image));
+
+const Jimp = JimpObj.default;
+
+let x = imageList[0];
+console.log(x);
 
 let nbIndice = 0;
 let ArleadyGet = [];
@@ -272,8 +278,6 @@ indexJeuArleadyGet.push(indexJeu);
 let debut = 5;
 let fin = 5;
 
-let hasard;
-
 let end = false;
 
 let heartBase = [];
@@ -303,6 +307,8 @@ for (let i = 0; i < 5; i++) {
 }
 
 function WorldGame() {
+  const [message, setMessage] = useState("");
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -315,6 +321,7 @@ function WorldGame() {
 
   useEffect(() => {
     setCountryTextSize();
+    sizeOfImage();
   }, []);
 
   return (
@@ -327,6 +334,7 @@ function WorldGame() {
         height: "${window.innerHeight}",
       }}
     >
+      <h1>{message}</h1>
       <Dialog open={open}>
         <DialogTitle>Vous avez perdu !</DialogTitle>
         <DialogContent>
@@ -474,7 +482,14 @@ function WorldGame() {
                   }
                 }}
               >
-                <Grid container direction="column">
+                <Grid
+                  container
+                  backgroundColor="yellow"
+                  item
+                  className="image"
+                  width="auto"
+                  height="auto"
+                >
                   <img id={index + 5} src={image} alt={`image-${index + 5}`} />
                   <span id={image}></span>
                 </Grid>
@@ -520,11 +535,65 @@ function WorldGame() {
 
 export default WorldGame;
 
+async function getPixelColor() {
+  const image = await Jimp.read("../img/flags/fr.png");
+
+  console.log(Jimp.intToRGBA(image.getPixelColor(0, 0)));
+}
+
+getPixelColor();
+
+axios.get("http://localhost:5000/api/date").then(function (response) {
+  let prec_date = response.data.result[0]["date"];
+  var date = new Date();
+  var UTCdate = new Date(date.toUTCString());
+
+  if (prec_date != UTCdate.getDate()) {
+    console.log(prec_date);
+    axios.delete("http://localhost:5000/api/date/" + prec_date);
+    axios.post("http://localhost:5000/api/date", {
+      date: UTCdate.getDate(),
+      indexJeu: Math.floor(Math.random() * 240),
+    });
+  }
+});
+
+const date1 = new Date("August 19, 1975 21:10:00");
+const date2 = new Date("August 19, 1975 15:10:00");
+
+console.log(date2.getTimezoneOffset());
+// Expected output: your local timezone offset in minutes
+// (e.g., -120). NOT the timezone offset of the date object.
+
+console.log(date1.getTimezoneOffset() === date2.getTimezoneOffset());
+// Expected output: true
+
 function setCountryTextSize() {
   if (document.getElementById("Pays").textContent.length >= 20) {
-    document.getElementById("Pays").style.fontSize = "30px";
+    if (window.innerWidth >= 426) {
+      document.getElementById("Pays").style.fontSize = "30px";
+    } else {
+      document.getElementById("Pays").style.fontSize = "15px";
+    }
   } else {
-    document.getElementById("Pays").style.fontSize = "50px";
+    if (window.innerWidth >= 426) {
+      document.getElementById("Pays").style.fontSize = "50px";
+    } else {
+      document.getElementById("Pays").style.fontSize = "30px";
+    }
+  }
+}
+
+function sizeOfImage() {
+  if (window.innerWidth < 426) {
+    for (let i = 0; i < CountryChoice.length; i++) {
+      let width = document.getElementById(i + 5).offsetWidth;
+      let height = document.getElementById(i + 5).offsetHeight;
+      console.log(width);
+      console.log(height);
+      document.getElementById(i + 5).style.width = width / 1.5 + "px";
+      document.getElementById(i + 5).style.height = height / 1.5 + "px";
+    }
   }
 }
 
