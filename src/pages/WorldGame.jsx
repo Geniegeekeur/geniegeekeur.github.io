@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import * as JimpObj from "jimp";
 import Stopwatch from "./StopWatch";
+import { Link } from "react-router-dom";
 
 const images = require.context("../img/flags/", true);
 const imageList = images.keys().map((image) => images(image));
@@ -24,7 +25,6 @@ const imageList = images.keys().map((image) => images(image));
 const Jimp = JimpObj.default;
 
 let x = imageList[0];
-console.log(x);
 
 let nbIndice = 0;
 let ArleadyGet = [];
@@ -311,6 +311,13 @@ function WorldGame() {
 
   const [open, setOpen] = React.useState(false);
 
+  useEffect(() => {
+    if (!localStorage.getItem("hasLoadedOnce")) {
+      localStorage.setItem("hasLoadedOnce", "true");
+      window.location.reload();
+    }
+  }, []);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -344,9 +351,11 @@ function WorldGame() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} autoFocus>
-            Fermer
-          </Button>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button onClick={handleClose} autoFocus>
+              Fermer
+            </Button>
+          </Link>
         </DialogActions>
       </Dialog>
       <Grid

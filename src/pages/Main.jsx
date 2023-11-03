@@ -1,6 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import { useEffect, useState } from "react";
 import {
   Typography,
   Card,
@@ -28,6 +29,13 @@ const theme = createTheme({
 });
 
 function Main() {
+  useEffect(() => {
+    if (!localStorage.getItem("hasLoadedOnce")) {
+      localStorage.setItem("hasLoadedOnce", "true");
+      window.location.reload();
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Grid
@@ -104,7 +112,13 @@ function Main() {
           </Grid>
           <Grid container item direction="column" xs>
             <Grid container item alignItems="center" justifyContent="center" xs>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  localStorage.removeItem("hasLoadedOnce");
+                }}
+              >
                 <Link to="/Guess" style={{ textDecoration: "none" }}>
                   <Typography
                     item
